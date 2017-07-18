@@ -366,6 +366,7 @@ keyword-expected-exception-procedure
 keyword-expected-exception?
 keyword-hash
 keyword?
+lazy-object->u8vector
 link-flat
 link-incremental
 list->f32vector
@@ -812,6 +813,7 @@ thread-terminate!
 thread-thread-group
 thread-yield!
 thread?
+time-microsecs
 time->seconds
 time?
 timeout->time
