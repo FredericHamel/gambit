@@ -116,7 +116,7 @@
      (lambda (module-ref-src)
        (let ((module-ref (##desourcify module-ref-src)))
 
-         (if (##not (##symbol? module-ref))
+         (if (##not (##or (##symbol? module-ref) (##string? module-ref)))
              (##raise-expression-parsing-exception
               'ill-formed-special-form
               src
