@@ -5001,7 +5001,6 @@ end-of-code
   `(##vector-ref ,module 3))
 
 (define ##registered-modules '())
-(define ##loaded-libraries '())
 (define ##vm-initialized #f) ;; Allow debug of code used in vm initialization.
 
 (define-prim (##register-module-descr! name module-descr)
@@ -5103,54 +5102,11 @@ end-of-code
      ##default-load-required-module
      module-ref))
 
-  (define (module-resolve module-fullname)
-    (let ((library-location (getenv "R7RS_LIBRARY_LOCATION" #f))
-          (module-canonical-name
-            (path-strip-extension
-              (path-strip-directory module-fullname))))
-      (let loop ((paths (if library-location
-                          (list library-location "" "~~lib")
-                          (list "" "~~lib"))))
-        (if (pair? paths)
-          (let ((path (car paths)))
-            (if path
-              ;; path/module-name.scm
-              (let ((module-path1 (path-expand
-                                    module-fullname
-                                    path)))
-                (if (file-exists? (##string-append module-path1 ".scm"))
-                  module-path1
-                  ;; path/module-name/module-name.scm
-                  (let ((module-path2 (path-expand
-                                        (path-expand
-                                          module-canonical-name
-                                          module-fullname) path)))
-                    (if (file-exists? (##string-append module-path2 ".scm"))
-                      module-path2
-                      (loop (cdr paths))))))))
-          (err)))))
-
   (cond ((##symbol? module-ref)
          (let ((module (##lookup-registered-module module-ref)))
            (if module
                (##load-required-module-structs (##list module) #t)
                (err))))
-        ((##string? module-ref)
-         (let ((module (##memq (##string->symbol module-ref) ##loaded-libraries)))
-           (let ((module-path (module-resolve module-ref)))
-             (or module
-                 ;; load module ignoring warning.
-                 (let ((x (##load module-path
-                           (lambda (script-line script-path) #f)
-                           #t
-                           #f
-                           #t)))
-                   (if (##fixnum? x)
-                     (err)
-                     (##begin
-                      (##set! ##loaded-libraries (cons (##string->symbol module-ref)
-                                                       ##loaded-libraries))
-                      x)))))))
         (else
          (err))))
 
