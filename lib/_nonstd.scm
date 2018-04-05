@@ -129,7 +129,8 @@
                (let loop ((lst required-modules))
                  (if (##not (##or (##eq? (##car lst) module-ref)
                                   ;; Slower
-                                  (string=? (##car lst) module-ref)))
+                                  (and (##string? (##car lst))
+                                       (##string=? (##car lst) module-ref))))
                      (let ((rest (##cdr lst)))
                        (if (##pair? rest)
                            (loop rest)
