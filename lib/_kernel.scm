@@ -5106,7 +5106,16 @@ end-of-code
          (let ((module (##lookup-registered-module module-ref)))
            (if module
                (##load-required-module-structs (##list module) #t)
-               (err))))
+               (let ((module-path
+                       (##symbol->string module-ref)))
+                 (let ((x (##load module-path
+                           (lambda (script-line script-path) #f)
+                           #t
+                           #f
+                           #t)))
+                   (if (##fixnum? x)
+                     (err)
+                     x))))))
         (else
          (err))))
 
