@@ -115,7 +115,7 @@
      2
      (lambda (module-ref-src)
        (let ((module-ref (##desourcify module-ref-src)))
-         (if (##not (##or (##symbol? module-ref) (##string? module-ref)))
+         (if (##not (##or (##symbol? module-ref) (##string? module-ref) (##vector? module-ref)))
              (##raise-expression-parsing-exception
               'ill-formed-special-form
               src
@@ -129,6 +129,7 @@
                (let loop ((lst required-modules))
                  (if (##not (##or (##eq? (##car lst) module-ref)
                                   ;; Slower
+                                  (##vector? (##car lst))
                                   (and (##string? (##car lst))
                                        (##string=? (##car lst) module-ref))))
                      (let ((rest (##cdr lst)))
