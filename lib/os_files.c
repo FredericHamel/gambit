@@ -1052,7 +1052,14 @@ ___SCMOBJ ___os_executable_path ___PVOID
 #if defined (USE_sysctl) && defined (CTL_KERN) && defined (KERN_PROC) && defined (KERN_PROC_PATHNAME)
 
   {
-    int mib[4] = { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
+    int mib[4] =
+#ifdef defined(__NetBSD__)
+      // NetBSD have KERN_PROC_PATHNAME as a substruct of KERN_PROC_ARGS
+      { CTL_KERN, KERN_PROC_ARGS, -1, KERN_PROC_PATHNAME };
+#else
+      { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
+#endif
+
     size_t cb = sizeof (path_buf);
 
     path = path_buf;
