@@ -1011,7 +1011,7 @@ ___SCMOBJ ___os_executable_path ___PVOID
   ___SCMOBJ e;
   ___SCMOBJ result = ___FIX(___UNIMPL_ERR);
 
-  ___CHAR_TYPE(___PATH_CE_SELECT) path_buf[___PATH_MAX_LENGTH+1];
+  ___CHAR_TYPE(___PATH_CE_SELECT) path_buf[___PATH_MAX_LENGTH+1] = {0};
   char *path = NULL;
 
 #ifdef USE_GetModuleFileName
@@ -1052,18 +1052,13 @@ ___SCMOBJ ___os_executable_path ___PVOID
 #if defined (USE_sysctl) && defined (CTL_KERN) && defined (KERN_PROC) && defined (KERN_PROC_PATHNAME)
 
   {
-    int mib[4] =
-#if defined(__NetBSD__)
-      // NetBSD have KERN_PROC_PATHNAME as a substruct of KERN_PROC_ARGS
-      { CTL_KERN, KERN_PROC_ARGS, -1, KERN_PROC_PATHNAME };
-#else
-      { CTL_KERN, KERN_PROC, KERN_PROC_PATHNAME, -1 };
-#endif
-
+    int mib[4] = { CTL_KERN, KERN_PROC_ARGS, -1, KERN_PROC_PATHNAME };
     size_t cb = sizeof (path_buf);
 
     path = path_buf;
 
+    if (sysctl (mib, 4, path, &cb, NULL, 0) != -1) goto convert_path;
+    mib[1] = KERN_PROC; mib[2] = KERN_PROC_PATHNAME; mib[3] = -1;
     if (sysctl (mib, 4, path, &cb, NULL, 0) != -1) goto convert_path;
 #if !(defined (USE_readlink) && defined (USE_getpid))
     return err_code_from_errno ();
