@@ -1053,7 +1053,7 @@ ___SCMOBJ ___os_executable_path ___PVOID
 
   {
     int mib[4] =
-#ifdef defined(__NetBSD__)
+#if defined(__NetBSD__)
       // NetBSD have KERN_PROC_PATHNAME as a substruct of KERN_PROC_ARGS
       { CTL_KERN, KERN_PROC_ARGS, -1, KERN_PROC_PATHNAME };
 #else
