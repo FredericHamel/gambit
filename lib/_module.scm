@@ -10,6 +10,12 @@
 
 (implement-type-modref)
 
+;;; Stats
+(define (show-compile-time key thunk)
+  (let ((stats (##exec-stats thunk)))
+    (##pretty-print (cons key stats))
+    (cond ((assoc 'result stats) => cdr))))
+
 ;;;----------------------------------------------------------------------------
 
 (define ##module-search-order (##os-module-search-order))
@@ -666,7 +672,10 @@
                     ;; Ask user to install.
                     (module-install-confirm? mod-string))
 
-                ((##eval '(let () (##import _pkg) install)) mod-string)
+                (show-compile-time
+                  '_pkg#install
+                  (lambda ()
+                    ((##eval '(let () (##import _pkg) install)) mod-string)))
                 ;; Return the modref
                 modref)))))
 
