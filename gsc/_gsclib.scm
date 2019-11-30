@@ -6,6 +6,12 @@
 
 (include "generic.scm")
 
+;;; Stats
+(define (show-compile-time key thunk)
+  (let ((stats (##exec-stats thunk)))
+    (##pretty-print (cons key stats))
+    (cond ((assoc 'result stats) => cdr))))
+
 ;;;----------------------------------------------------------------------------
 
 (set! make-global-environment ;; import runtime macros into compilation env
@@ -328,6 +334,9 @@
                      options
                      (lambda () target-filename)))
            (let ((exit-status
+                   (show-compile-time
+                     'gambuild
+                     (lambda ()
                   (##gambuild
                    (c#target-name target)
                    type
@@ -349,7 +358,7 @@
                                    (##path-normalize
                                     (##path-expand target-filename)
                                     #t
-                                    output-dir))))))
+                                    output-dir))))))))
              (if (and (##not (##assq 'keep-c options))
                       (##not (##string=? filename target-filename)))
                  (##delete-file target-filename))
