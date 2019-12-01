@@ -103,8 +103,9 @@
        ;; Remove tags restriction.
        (git-command-aux (list "archive" ref)
                         (lambda (p)
-                          (and (= (process-status p) 0)
-                               (tar-unpack-port p)))
+                          (let ((tar-obj (tar-unpack-port p)))
+                            (and (= (process-status p) 0)
+                                 tar-obj)))
                         repo
                         #f)))
 
