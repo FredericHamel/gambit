@@ -13,7 +13,7 @@
 ;;; Stats
 (define (show-compile-time key thunk)
   (let ((stats (##exec-stats thunk)))
-    (##pretty-print (cons key stats))
+    (##pretty-print (cons key stats) (current-output-port))
     (cond ((assoc 'result stats) => cdr))))
 
 ;;;----------------------------------------------------------------------------
