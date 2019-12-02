@@ -795,8 +795,8 @@
 
 (process-links-set! (self) '())
 
-(define (node-init node)
-  (start-tcp-server (node-host node) (node-port node) start-messenger)
+(define (node-init node #!optional (local-address ""))
+  (start-tcp-server local-address (node-port node) start-messenger)
   (set! current-node (lambda () node))
   (publish-external-services)
   'ok)
