@@ -234,7 +234,7 @@ ___device_tty *self;)
 {
   ___device_tty *d = self;
 
-#ifdef ___USE_POSIX
+#ifdef USE_POSIX
 
   int fd = d->fd;
 
@@ -324,7 +324,7 @@ ___BOOL undo;)
   ___device_tty *d = self;
   ___SCMOBJ e = ___FIX(___NO_ERR);
 
-#ifdef ___USE_POSIX
+#ifdef USE_POSIX
 
   int fd = d->fd;
 
