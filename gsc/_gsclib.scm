@@ -6,12 +6,6 @@
 
 (include "generic.scm")
 
-;;; Stats
-(define (show-compile-time key thunk)
-  (let ((stats (##exec-stats thunk)))
-    (##pretty-print (cons key stats) (current-output-port))
-    (cond ((assoc 'result stats) => cdr))))
-
 ;;;----------------------------------------------------------------------------
 
 (set! make-global-environment ;; import runtime macros into compilation env
@@ -75,6 +69,7 @@
                                          out)))))))
 
 (define (##compile-file-to-target filename-or-source options output)
+  (##print-timestamp 'timestamp-compile-file-to-target)
   (let* ((options
           (##compile-options-normalize options))
          (module-ref
@@ -242,6 +237,7 @@
          ld-options
          pkg-config
          pkg-config-path)
+  (##print-timestamp 'timestamp-compile-file)
   (let* ((options
           (##compile-options-normalize options))
          (target
@@ -334,9 +330,6 @@
                      options
                      (lambda () target-filename)))
            (let ((exit-status
-                   (show-compile-time
-                     'gambuild
-                     (lambda ()
                   (##gambuild
                    (c#target-name target)
                    type
@@ -358,7 +351,7 @@
                                    (##path-normalize
                                     (##path-expand target-filename)
                                     #t
-                                    output-dir))))))))
+                                    output-dir))))))
              (if (and (##not (##assq 'keep-c options))
                       (##not (##string=? filename target-filename)))
                  (##delete-file target-filename))
@@ -496,6 +489,7 @@
   (define (relative-to-output-dir filename)
     (##path-normalize (##path-expand filename) #t output-dir))
 
+  (##print-timestamp 'timestamp-gambuild-start)
   (let* ((gambitdir-bin
           (install-dir "~~bin"))
          (gambitdir-include
@@ -509,6 +503,7 @@
      #t
      (lambda (port)
        (let ((status (##process-status port)))
+         (##print-timestamp 'timestamp-gambuild-end)
          (##close-port port)
          status))
      open-process

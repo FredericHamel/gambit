@@ -3875,3 +3875,10 @@
     (##type-cast x lo)))
 
 ;;;============================================================================
+
+;;; Print timestamp
+(define-prim (##print-timestamp key)
+  (##pretty-print (list key (current-second)) ##stdout-port))
+
+;;;============================================================================
+

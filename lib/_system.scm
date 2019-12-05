@@ -3536,7 +3536,9 @@
             (else
              (cannot-serialize obj)))))
 
+  (##print-timestamp 'serialize-start)
   (serialize! obj)
+  (##print-timestamp 'serialize-end)
 
   (get-output-u8vector))
 
@@ -4148,7 +4150,9 @@
                (alloc! obj)
                obj)))))))
 
+  (##print-timestamp 'deserialize-start)
   (let ((obj (deserialize!)))
+    (##print-timestamp 'deserialize-end)
     (if (eof?)
         obj
         (err))))
