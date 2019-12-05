@@ -11,9 +11,9 @@
 (implement-type-modref)
 
 ;;; Stats
-(define (show-compile-time key thunk)
+#;(define (show-compile-time key thunk)
   (let ((stats (##exec-stats thunk)))
-    (##pretty-print (cons key stats) (current-output-port))
+    (##pretty-print (cons key stats) ##stdout-port)
     (cond ((assoc 'result stats) => cdr))))
 
 ;;;----------------------------------------------------------------------------
@@ -681,10 +681,9 @@
                     ;; Ask user to install.
                     (module-install-confirm? mod-string))
 
-                (show-compile-time
-                  '_pkg#install
-                  (lambda ()
-                    ((##eval '(let () (##import _pkg) install)) mod-string)))
+                (##print-timestamp 'timestamp-install-pre)
+                ((##eval '(let () (##import _pkg) install)) mod-string)
+                (##print-timestamp 'timestamp-install-post)
                 ;; Return the modref
                 modref)))))
 
