@@ -4001,7 +4001,7 @@
 
 ;;; Print timestamp
 (define-prim (##print-timestamp key)
-  (##pretty-print (list key (current-second)) ##stdout-port)
+  (##pretty-print (cons key (current-second)) ##stdout-port)
   (##force-output ##stdout-port))
 
 ;;;============================================================================
