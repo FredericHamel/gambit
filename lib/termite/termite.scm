@@ -400,7 +400,7 @@
        (u8vector 0 0 0 0))
      (n
        (read-subu8vector serialized-len 0 4 port)))
-
+  (##print-timestamp 'timestamp-read-start)
   (cond ((= 0 n)
        #!eof)
       ((not (= 4 n))
@@ -415,7 +415,7 @@
            (make-u8vector len))
            (n
            (read-subu8vector serialized-obj 0 len port)))
-
+        (##print-timestamp 'timestamp-read-end)
         (if (not (eqv? len n))
           (begin
           (error "deserialization error"
