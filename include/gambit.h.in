@@ -9569,6 +9569,10 @@ typedef struct ___setup_params_struct
 
 typedef struct ___global_state_struct
   {
+    void (*___raise_interrupt)
+        ___P((int code),
+                ());
+
     ___virtual_machine_state_struct vmstate0; /* first VM */
 
 #ifndef ___SINGLE_VM
@@ -10907,9 +10911,6 @@ typedef struct ___global_state_struct
     void (*___raise_interrupt_vmstate)
        ___P((___virtual_machine_state ___vms,
              int code),
-            ());
-    void (*___raise_interrupt)
-       ___P((int code),
             ());
     void (*___begin_interrupt_service_pstate)
        ___P((___processor_state ___ps),
