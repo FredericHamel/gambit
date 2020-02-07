@@ -7142,7 +7142,7 @@
                        ;; substantial changes to the I/O subsystem.  We'll
                        ;; tackle that in a future release.
                        (##thread-sleep! poll-interval)
-                       (loop (##flmin 0.2 (##fl* 1.2 poll-interval))))
+                       (loop (##flmin 0.001 (##fl* 1.2 poll-interval))))
                      (if (##eq? timeout-val (macro-absent-obj))
                          (##raise-unterminated-process-exception
                           port
