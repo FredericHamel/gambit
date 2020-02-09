@@ -515,7 +515,11 @@
      #f  ;; don't capture output
      #f  ;; don't redirect stdin
      output-dir  ;; run in output directory
-     add-vars)))
+     add-vars
+     (macro-absent-obj)
+     (lambda (r)
+       (##print-timestamp 'timestamp-gambuild-end)
+       r))))
 
 (define (##extract-target options)
   (let ((t (##assq 'target options)))
