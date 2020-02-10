@@ -6085,8 +6085,6 @@ ___setup_params_struct *setup_params;)
 
   set_gstate(___GSTATE);
 
-#else
-#error "Compile with Gambit GSTATE"
 #endif
 
   /*
